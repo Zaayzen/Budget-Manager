@@ -67,3 +67,24 @@ class BudgetManager:
         except FileNotFoundError: 
             return 0 
         return total
+
+    def charger_depenses(self):
+        import csv 
+        try:
+            with open(self.fichier_donnees, "r") as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    dep_id = int[row[0]]
+                    nom = row[1]
+                    montant = float[row[2]]
+                    categorie = row[3]
+                    date = row[4]
+                    from Depense import Depense
+                    dep = Depense(nom, montant, categorie, date)
+                    dep.id = dep_id
+                    self.depenses.append(dep)
+                    if dep_id >= self.next_id: 
+                        self.next_id += 1
+        except FileNotFoundError:
+            pass
+

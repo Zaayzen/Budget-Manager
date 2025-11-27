@@ -40,4 +40,43 @@ def test_afficher_depense():
 
     manager.afficher_depenses()
 
-test_afficher_depense()
+
+def __init__(self, fichier_donnees = "depenses.csv"):
+    self.depenses = [] 
+    self.fichier_donnees = fichier_donnees
+    self.categorie = ["Transport", "Alimentation", "Loisirs", "Autre"]
+    self.next_id = 1
+    self.charger_depenses()
+
+def test_charger_depenses():
+    import os
+    if os.path.exists("depenses.csv"):
+        os.remove("depenses.csv")
+
+    print("=== TEST : Sauvegarde ===")
+    bm1 = BudgetManager()
+
+    dep1 = Depense("Essence", 50, "Transport")
+    dep2 = Depense("Pizza", 12, "Alimentation")
+
+    bm1.add_depense(dep1)
+    bm1.add_depense(dep2)
+
+    print("Dépenses ajoutées dans bm1 :")
+    bm1.afficher_depenses()
+
+    print("\n=== TEST : Chargement ===")
+    bm2 = BudgetManager()  # Ceci recharge le CSV automatiquement
+
+    print("Dépenses chargées dans bm2 :")
+    bm2.afficher_depenses()
+
+    print("\n=== TEST : Total ===")
+    print("Total bm2 :", bm2.total_depenses())
+    print("\nLe prochain ID devrait être 3 →", bm2.next_id)
+
+test_charger_depenses()
+
+
+
+
