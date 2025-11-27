@@ -32,8 +32,12 @@ def test_delete_depense():
     assert manager.depenses[0].nom == "Restaurant"
     assert manager.depenses[0].montant == 20
 
-if __name__ == "__main__":
-    test_delete_depense()
-    print("test réussi !")
+def test_afficher_depense():
+    manager = BudgetManager()
 
-    
+    manager.add_depense(Depense("Essence", 60, "Transport", "2025-11-27"))
+    manager.add_depense(Depense("Course", 40, "Alimentation", "2025-11-27"))
+
+    manager.afficher_depenses()
+
+test_afficher_depense()
