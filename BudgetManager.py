@@ -1,4 +1,6 @@
 import csv
+import pandas as pd
+from Depense import Depense
 
 class BudgetManager:
     def __init__(self, fichier_donnees="depenses.csv"):
@@ -17,7 +19,7 @@ class BudgetManager:
         else:
             self.depenses.append(depense)
             depense.id = self.next_id
-            self.next_id += 1
+            self.next_id = depense.id + 1
             with open(self.fichier_donnees, "a", newline="") as f:
                 writer = csv.writer(f)
                 writer.writerow([depense.id, depense.nom, depense.montant, depense.categorie, depense.date])
@@ -49,7 +51,7 @@ class BudgetManager:
             print("Aucune dépense trouvée")
             return 
         for dep in self.depenses :
-            print(f"ID: {id} | Nom: {dep.nom} | Montant {dep.montant}€" f"Catégorie: {dep.categorie} | Date: {dep.date}")
+            print(f"ID: {dep.id} | Nom: {dep.nom} | Montant {dep.montant}€ " f"Catégorie: {dep.categorie} | Date: {dep.date}")
 
     def total_depenses(self):
         total = 0
@@ -60,31 +62,39 @@ class BudgetManager:
     def total_depenses_csv(self): 
         total = 0 
         try: 
-            with open(self.fichier_donnees, "r") as f:
+            with open(self.fichier_donnees, "r", newline="") as f:
                 reader = csv.reader(f)
                 for row in reader :
-                    toral += float(row[2])
+                    if len(row) < 3:
+                        continue
+                    total += float(row[2])
         except FileNotFoundError: 
             return 0 
         return total
 
+    def sauvgarder_depenses(self):
+        data = [{
+        "id": dep.id,
+        "nom": dep.nom,
+        "montant": dep.montant,
+        "categorie": dep.categorie,
+        "date": dep.date
+        } for dep in self.depenses]
+
+        df = pd.DataFrame(data)
+        df.to_csv(self.fichier_donnees, index=False)
+
     def charger_depenses(self):
-        import csv 
-        try:
-            with open(self.fichier_donnees, "r") as f:
-                reader = csv.reader(f)
-                for row in reader:
-                    dep_id = int[row[0]]
-                    nom = row[1]
-                    montant = float[row[2]]
-                    categorie = row[3]
-                    date = row[4]
-                    from Depense import Depense
-                    dep = Depense(nom, montant, categorie, date)
-                    dep.id = dep_id
-                    self.depenses.append(dep)
-                    if dep_id >= self.next_id: 
-                        self.next_id += 1
-        except FileNotFoundError:
-            pass
+        import os
+        if not os.path.exists(self.fichier_donnees):
+            return
+
+        df = pd.read_csv(self.fichier_donnees)
+        self.depenses = []
+        for _, row in df.iterrows():
+            dep = Depense(row['nom'], row['montant'], row['categorie'], row['date'])
+            dep.id = int(row['id'])
+            self.depenses.append(dep)
+            if dep.id >= self.next_id:
+                self.next_id = dep.id + 1
 

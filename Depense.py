@@ -4,8 +4,9 @@ class Depense:
         self.nom = nom
         self.montant = montant
         self.categorie = categorie
-        if date_depense == None:
+        if date_depense == " ":
             self.date = str(date.today())
         else:
             self.date = date_depense
         self.id = None
+

@@ -41,6 +41,7 @@ def test_afficher_depense():
     manager.afficher_depenses()
 
 
+
 def __init__(self, fichier_donnees = "depenses.csv"):
     self.depenses = [] 
     self.fichier_donnees = fichier_donnees
@@ -58,9 +59,11 @@ def test_charger_depenses():
 
     dep1 = Depense("Essence", 50, "Transport")
     dep2 = Depense("Pizza", 12, "Alimentation")
+    dep3 = Depense("JJJ", 20, "Autre")
 
     bm1.add_depense(dep1)
     bm1.add_depense(dep2)
+    bm1.add_depense(dep3)
 
     print("Dépenses ajoutées dans bm1 :")
     bm1.afficher_depenses()
@@ -72,8 +75,8 @@ def test_charger_depenses():
     bm2.afficher_depenses()
 
     print("\n=== TEST : Total ===")
-    print("Total bm2 :", bm2.total_depenses())
-    print("\nLe prochain ID devrait être 3 →", bm2.next_id)
+    print("Total bm1 :", bm1.total_depenses())
+    print("\nLe prochain ID devrait être →", bm1.next_id)
 
 test_charger_depenses()
 
